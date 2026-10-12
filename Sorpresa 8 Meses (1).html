@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi amor - 8 Meses ❤️</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        romantic: {
+                            50: '#fdf2f4',
+                            100: '#fbe7eb',
+                            200: '#f7d3d9',
+                            300: '#f0b0bc',
+                            400: '#e57c91',
+                            500: '#d94f6d',
+                            600: '#c23352',
+                            700: '#a32842',
+                            800: '#872338',
+                            900: '#722031',
+                            950: '#3f0d17',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0d0608;
+            color: #fce7ec;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .romantic-glow {
+            box-shadow: 0 0 25px rgba(217, 79, 109, 0.25);
+        }
+        .romantic-glow-strong {
+            box-shadow: 0 0 35px rgba(217, 79, 109, 0.5);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-100px) rotate(15deg); opacity: 0.8; }
+            100% { transform: translateY(-200px) rotate(-15deg); opacity: 0; }
+        }
+        .floating-heart {
+            position: absolute;
+            color: #e57c91;
+            animation: float 4s ease-in-out infinite;
+            user-select: none;
+            pointer-events: none;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a0f12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #872338;
+            border-radius: 3px;
+        }
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-romantic-500 selection:text-white font-sans">
+
+    <!-- Floating background hearts container -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Radial backdrop glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-romantic-600/15 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+    <!-- WELCOME SCREEN -->
+    <div id="welcome-screen" class="relative z-10 flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto min-h-screen">
+        <div class="mb-6 relative">
+            <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-romantic-600 to-romantic-400 rounded-full flex items-center justify-center romantic-glow-strong animate-pulse">
+                <i class="fa-solid fa-heart text-white text-5xl"></i>
+            </div>
+            <span class="absolute -bottom-2 right-1/2 translate-x-1/2 bg-romantic-900/90 border border-romantic-500/50 text-romantic-200 text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap">
+                10 al 14 de Octubre
+            </span>
+        </div>
+
+        <h1 class="text-3xl font-bold mb-2 tracking-tight bg-gradient-to-r from-romantic-200 via-white to-romantic-300 bg-clip-text text-transparent">
+            Nuestro Octavo Mes
+        </h1>
+        <p class="text-romantic-300 text-sm font-medium mb-2">
+            Descubre el regalo de hoy
+        </p>
+        <p class="text-romantic-200/70 text-xs mb-8 leading-relaxed max-w-xs">
+            Cada día una canción de Peint y una carta escrita especialmente con todo mi amor.
+        </p>
+
+        <div class="w-full space-y-3">
+            <button onclick="enterExperience()" class="w-full py-4 px-6 bg-gradient-to-r from-romantic-600 to-romantic-500 hover:from-romantic-500 hover:to-romantic-400 text-white font-semibold rounded-2xl shadow-lg romantic-glow transition-all transform active:scale-95 flex items-center justify-center space-x-3 text-base">
+                <span>Haz click</span>
+                <i class="fa-solid fa-heart text-sm"></i>
+            </button>
+
+            <button onclick="toggleDemoMode()" id="demo-mode-btn" class="w-full py-2.5 px-4 bg-romantic-950/60 border border-romantic-800/60 hover:bg-romantic-900/50 text-romantic-300 text-xs font-medium rounded-xl transition-all">
+                🔓 Activar Modo Demostración (Ver todos los días)
+            </button>
+
+            <button onclick="openEditorModal()" class="w-full py-2.5 px-4 bg-romantic-900/40 border border-romantic-700/40 hover:bg-romantic-800/40 text-romantic-200 text-xs font-medium rounded-xl transition-all flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-pen-to-square text-romantic-400"></i>
+                <span>Editar Cartas y Canciones</span>
+            </button>
+        </div>
+
+        <p class="mt-8 text-xs text-romantic-400/60">
+            Hecho con ❤️ especialmente para ti
+        </p>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <div id="main-app" class="relative z-10 flex-1 flex flex-col max-w-md mx-auto w-full p-4 sm:p-6 hidden">
+        
+        <!-- Header bar -->
+        <header class="flex items-center justify-between mb-4 pb-3 border-b border-romantic-900/60">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-romantic-900/80 border border-romantic-700/50 flex items-center justify-center text-romantic-300">
+                    <i class="fa-solid fa-calendar-heart text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-sm text-white">Nuestra Cuenta Regresiva</h2>
+                    <p class="text-[11px] text-romantic-400">10 al 14 de Octubre • 8 Meses</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openEditorModal()" class="w-9 h-9 rounded-xl bg-romantic-900/80 border border-romantic-700/50 flex items-center justify-center text-romantic-300 hover:text-white transition-colors" title="Editar Cartas">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                </button>
+                <button onclick="goHome()" class="w-9 h-9 rounded-xl bg-romantic-950 border border-romantic-900 flex items-center justify-center text-romantic-300 hover:text-white transition-colors">
+                    <i class="fa-solid fa-house text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Demo banner -->
+        <div id="demo-badge" class="hidden mb-4 bg-romantic-950/80 border border-romantic-600/40 px-3 py-2 rounded-xl text-center text-xs text-romantic-200 flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-unlock text-romantic-400"></i>
+            <span>Modo Demostración activo: Todos los días accesibles.</span>
+        </div>
+
+        <!-- Days Navigation Tabs -->
+        <div class="flex space-x-2 overflow-x-auto pb-3 mb-4 scrollbar-none" id="days-tabs">
+            <!-- Rendered by JS -->
+        </div>
+
+        <!-- Active Day Card Content -->
+        <div id="day-content-container" class="flex-1 pb-8">
+            <!-- Rendered by JS -->
+        </div>
+
+        <footer class="text-center py-3 text-xs text-romantic-500/70 border-t border-romantic-900/30">
+            8 Meses de Amor Incondicional ❤️
+        </footer>
+    </div>
+
+    <!-- FINAL DAY SURPRISE MODAL (Oct 14) -->
+    <div id="surprise-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-b from-romantic-950 via-[#180a0f] to-[#0d0407] border border-romantic-600/50 rounded-3xl p-6 max-w-sm w-full text-center relative romantic-glow-strong animate-in fade-in zoom-in duration-300">
+            <button onclick="closeSurpriseModal()" class="absolute top-4 right-4 text-romantic-400 hover:text-white w-8 h-8 rounded-full bg-romantic-900/50 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-tr from-romantic-600 to-romantic-400 rounded-full flex items-center justify-center romantic-glow animate-bounce">
+                <i class="fa-solid fa-ring text-white text-3xl"></i>
+            </div>
+
+            <h3 class="text-xl font-bold text-white mb-2">Para el amor de mi vida</h3>
+            <p class="text-xs text-romantic-200 leading-relaxed mb-6">
+                Estos 8 meses a tu lado han sido el mejor capítulo de mi historia. Gracias por hacerme el hombre más feliz del mundo día a día. ¡Te amo con toda mi alma! ❤️✨
+            </p>
+
+            <div class="bg-romantic-900/40 border border-romantic-800/50 rounded-2xl p-3 text-xs text-romantic-300 italic mb-6">
+                "Prometo, soy tuyo, eres tú... hoy y para siempre."
+            </div>
+
+            <button onclick="closeSurpriseModal()" class="w-full py-3.5 bg-gradient-to-r from-romantic-600 to-romantic-500 hover:from-romantic-500 hover:to-romantic-400 text-white font-semibold rounded-xl shadow-md transition-all">
+                Te Amo Muchísimo ❤️
+            </button>
+        </div>
+    </div>
+
+    <!-- LETTER EDITOR MODAL -->
+    <div id="editor-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden overflow-y-auto">
+        <div class="bg-gradient-to-b from-romantic-950 to-[#12070a] border border-romantic-600/50 rounded-3xl p-5 max-w-md w-full my-auto relative romantic-glow max-h-[90vh] flex flex-col">
+            
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-romantic-800/60">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-pen-to-square text-romantic-400 text-lg"></i>
+                    <h3 class="font-bold text-base text-white">Editar Cartas y Canciones</h3>
+                </div>
+                <button onclick="closeEditorModal()" class="text-romantic-400 hover:text-white w-8 h-8 rounded-full bg-romantic-900/50 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Day Selector for Editor -->
+            <div class="flex space-x-2 overflow-x-auto pb-2 mb-3 scrollbar-none" id="editor-day-selector">
+                <!-- Populated via JS -->
+            </div>
+
+            <!-- Form Inputs -->
+            <div class="space-y-3 flex-1 overflow-y-auto pr-1">
+                <div>
+                    <label class="block text-xs font-medium text-romantic-300 mb-1">Título del día:</label>
+                    <input type="text" id="edit-title" class="w-full bg-romantic-900/40 border border-romantic-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-romantic-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-romantic-300 mb-1">Nombre de la canción Peint:</label>
+                    <input type="text" id="edit-song" class="w-full bg-romantic-900/40 border border-romantic-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-romantic-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-romantic-300 mb-1">Búsqueda / Link o Video ID de YouTube:</label>
+                    <input type="text" id="edit-yt" placeholder="Ej: Prometo Peint o ID del video" class="w-full bg-romantic-900/40 border border-romantic-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-romantic-500">
+                    <p class="text-[10px] text-romantic-400/80 mt-1">Puedes pegar un enlace completo de YouTube, el ID del video o el término de búsqueda de la canción.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-romantic-300 mb-1">Texto de la Carta:</label>
+                    <textarea id="edit-letter" rows="5" class="w-full bg-romantic-900/40 border border-romantic-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-romantic-500 leading-relaxed"></textarea>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="pt-4 mt-3 border-t border-romantic-800/60 flex space-x-2">
+                <button onclick="resetDefaultData()" class="px-3 py-2.5 bg-romantic-900/60 border border-romantic-800 text-romantic-300 text-xs font-medium rounded-xl transition-all">
+                    Restaurar
+                </button>
+                <button onclick="saveEditorData()" class="flex-1 py-2.5 bg-gradient-to-r from-romantic-600 to-romantic-500 hover:from-romantic-500 hover:to-romantic-400 text-white text-xs font-semibold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>Guardar Cambios</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default Configuration containing Peint songs and updated custom letters
+        const defaultDaysData = [
+            {
+                day: 10,
+                dateStr: "10 de Octubre",
+                title: "Día 10: Prometo",
+                songQuery: "Prometo Peint",
+                youtubeId: "Prometo Peint",
+                peintSongTitle: "Peint - Prometo",
+                letter: "holas mi niña hermosa ☺️\n\nAquí empieza mi pequeñito plan para conquistarla hace meses ☺️\n\nEn este día me puse muy nervioso de como podría salir todo, realmente no dormir esa noche jajajjaja\n\nAsí de nervioso me pones mi niña 😍\n\nTiamoooooooooo demasiado."
+            },
+            {
+                day: 11,
+                dateStr: "11 de Octubre",
+                title: "Día 11: Mi complemento",
+                songQuery: "Mi complemento Peint",
+                youtubeId: "Mi complemento Peint",
+                peintSongTitle: "Peint - Mi Complemento",
+                letter: "holas mi niñaaaaa\n\nAquí sigo pensando en que hacer, me metí a Youtube a ver infinidad de videos, vi tutoriales jajajajja\n\nHize de todo y busque y busque, hasta que encontré el juego donde empezó esto mi niña hermosa ☺️\n\nY decidí que ahí iba a ser donde te iba a decir todo 😌"
+            },
+            {
+                day: 12,
+                dateStr: "12 de Octubre",
+                title: "Día 12: Tus besos",
+                songQuery: "Tus besos Peint",
+                youtubeId: "Tus besos Peint",
+                peintSongTitle: "Peint - Tus Besos",
+                letter: "amooooooor holas otra vez 😼\n\nEn este día estuve pensando en que decirte, pensé que debía ser algo bonito y romántico 😅\n\nAmooooooooor 😫\n\nOtra noche me tuviste sin dormir amor 🥹\n\nJajajajaja pero fue porque quise, porque sabía que ese día no se tomaba a la ligera 😚"
+            },
+            {
+                day: 13,
+                dateStr: "13 de Octubre",
+                title: "Día 13: Soy tuyo",
+                songQuery: "Soy tuyo Peint",
+                youtubeId: "Soy tuyo Peint",
+                peintSongTitle: "Peint - Soy Tuyo",
+                letter: "aquí en este día estuve pensando muchoooo el que podrías decir, pensé que talvez podrías decir que no, pensé como podría reaccionar, pensé y pensé y pensé pero al final me decidí y pensé el tiempo que jugamos y todo lo que pasamos, hasta ví el chat varias veces ☺️\n\nY en la noche me decidí obvio ultra nervioso 😅\n\nSimplemente con existir aceleras un montón me corazón amooor 🥹🥹"
+            },
+            {
+                day: 14,
+                dateStr: "14 de Octubre",
+                title: "Finalmente es 14 y está fecha es especial ☺️",
+                songQuery: "Eres tu Peint",
+                youtubeId: "Eres tu Peint",
+                peintSongTitle: "Peint - Eres Tú",
+                letter: "finalmente el día de hoy amor, cuando por fin te dije lo que quería decir, al final no dije lo que tenía preparado, lo que dije fue lo que realmente me salió del alma, te dije lo que sentia desde que hablamos por primera vez 😍\n\nEse día marco un antes y un después en mi vida, siempre para bien, no tengo día malo contigo mi amor 🥹\n\nSiempre son muy bonitos recuerdos, siempre estás fabulosa y no puedo pedir más 🥹🥹🥹\n\nEres tu lo más perfecto y bonito que me ha pasado en la día y espero que un día los dos veamos hacia atrás y pensemos todos los bonitos recuerdos y digamos \"contra todo pronóstico pudimos seguir juntos y aquí estaremos siempre\"\n\nQuiero cumplir mis metas contigo y verte a ti cumplir tus metas 🥹\n\nSiempre juntos ☺️\n\nEres lo que más amo en este mundo mi niña hermosa porque al final de cuentas\n\"Eres tu\" mi amor soñado ☺️\n\nTiamoooooooooo mushototototototote demasiado mi niña 😘",
+                isFinalDay: true
+            }
+        ];
+
+        let daysData = [];
+        let demoMode = false;
+        let activeDayIndex = 0;
+        let editingDayIndex = 0;
+
+        function loadDaysData() {
+            const saved = localStorage.getItem('anniversary_days_data_v2');
+            if (saved) {
+                try {
+                    daysData = JSON.parse(saved);
+                } catch(e) {
+                    daysData = JSON.parse(JSON.stringify(defaultDaysData));
+                }
+            } else {
+                daysData = JSON.parse(JSON.stringify(defaultDaysData));
+            }
+        }
+
+        function saveDaysDataToStorage() {
+            localStorage.setItem('anniversary_days_data_v2', JSON.stringify(daysData));
+        }
+
+        function getCurrentSystemDay() {
+            if (demoMode) return 14; 
+            const now = new Date();
+            const month = now.getMonth(); // 9 is October
+            const date = now.getDate();
+            
+            if (month !== 9) { 
+                return 10; // Default active fallback outside October
+            }
+            if (date < 10) return 10;
+            if (date > 14) return 14;
+            return date;
+        }
+
+        function toggleDemoMode() {
+            demoMode = !demoMode;
+            const btn = document.getElementById('demo-mode-btn');
+            const badge = document.getElementById('demo-badge');
+            if (demoMode) {
+                btn.innerHTML = "🔒 Desactivar Modo Demostración";
+                btn.classList.add("bg-romantic-800", "text-white");
+                badge.classList.remove("hidden");
+            } else {
+                btn.innerHTML = "🔓 Activar Modo Demostración (Ver todos los días)";
+                btn.classList.remove("bg-romantic-800", "text-white");
+                badge.classList.add("hidden");
+            }
+            renderDaysTabs();
+            renderActiveDayContent();
+        }
+
+        function enterExperience() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            
+            const currentDay = getCurrentSystemDay();
+            const foundIndex = daysData.findIndex(d => d.day === currentDay);
+            activeDayIndex = foundIndex !== -1 ? foundIndex : 0;
+            
+            renderDaysTabs();
+            renderActiveDayContent();
+        }
+
+        function goHome() {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+        }
+
+        function selectDay(index) {
+            const currentSystemDay = getCurrentSystemDay();
+            const targetDay = daysData[index].day;
+
+            if (!demoMode && targetDay > currentSystemDay) {
+                showLockedMessage(targetDay);
+                return;
+            }
+
+            activeDayIndex = index;
+            renderDaysTabs();
+            renderActiveDayContent();
+        }
+
+        function showLockedMessage(dayNum) {
+            const existingToast = document.getElementById('lock-toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'lock-toast';
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-romantic-950 border border-romantic-600 text-romantic-200 px-4 py-3 rounded-2xl shadow-xl text-xs flex items-center space-x-3 animate-bounce';
+            toast.innerHTML = `
+                <i class="fa-solid fa-lock text-romantic-400 text-base"></i>
+                <span>Este regalo se desbloquea el ${dayNum} de octubre ❤️</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function renderDaysTabs() {
+            const container = document.getElementById('days-tabs');
+            container.innerHTML = '';
+            const currentSystemDay = getCurrentSystemDay();
+
+            daysData.forEach((item, index) => {
+                const isUnlocked = demoMode || item.day <= currentSystemDay;
+                const isActive = index === activeDayIndex;
+
+                let btnClass = "flex flex-col items-center justify-center px-4 py-2.5 rounded-2xl text-xs font-medium transition-all min-w-[75px] shrink-0 border ";
+                
+                if (isActive) {
+                    btnClass += "bg-gradient-to-b from-romantic-600 to-romantic-700 text-white border-romantic-400 romantic-glow";
+                } else if (isUnlocked) {
+                    btnClass += "bg-romantic-950/80 text-romantic-200 border-romantic-800/60 hover:bg-romantic-900/50";
+                } else {
+                    btnClass += "bg-romantic-950/40 text-romantic-500/60 border-romantic-900/40 opacity-70";
+                }
+
+                const btn = document.createElement('button');
+                btn.className = btnClass;
+                btn.onclick = () => selectDay(index);
+                btn.innerHTML = `
+                    <span class="text-[10px] uppercase tracking-wider mb-0.5">${item.day} Oct</span>
+                    <i class="fa-solid ${isUnlocked ? (isActive ? 'fa-heart text-white' : 'fa-gift text-romantic-400') : 'fa-lock'} text-sm mt-0.5"></i>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function extractYouTubeEmbedUrl(input) {
+            if (!input) return '';
+            
+            // Check if user pasted standard youtube link or shorts
+            let videoId = '';
+            if (input.includes('youtube.com/watch?v=')) {
+                videoId = input.split('v=')[1]?.split('&')[0];
+            } else if (input.includes('youtu.be/')) {
+                videoId = input.split('youtu.be/')[1]?.split('?')[0];
+            } else if (input.includes('youtube.com/embed/')) {
+                videoId = input.split('embed/')[1]?.split('?')[0];
+            }
+
+            if (videoId) {
+                return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0`;
+            }
+
+            // Fallback search term format if direct query/string
+            const searchParam = encodeURIComponent(input);
+            return `https://www.youtube-nocookie.com/embed?listType=search&list=${searchParam}`;
+        }
+
+        function renderActiveDayContent() {
+            const container = document.getElementById('day-content-container');
+            const data = daysData[activeDayIndex];
+            const currentSystemDay = getCurrentSystemDay();
+            const isUnlocked = demoMode || data.day <= currentSystemDay;
+
+            if (!isUnlocked) {
+                container.innerHTML = `
+                    <div class="bg-romantic-950/60 border border-romantic-900 rounded-3xl p-8 text-center my-6">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-romantic-900/50 rounded-full flex items-center justify-center text-romantic-400 text-2xl">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Sorpresa Bloqueada</h3>
+                        <p class="text-xs text-romantic-400 mb-4">Este regalo y su canción se revelarán el ${data.day} de octubre.</p>
+                        <span class="text-[10px] bg-romantic-900/80 text-romantic-300 px-3 py-1.5 rounded-full">Falta muy poco mi amor ❤️</span>
+                    </div>
+                `;
+                return;
+            }
+
+            const embedUrl = extractYouTubeEmbedUrl(data.youtubeId || data.songQuery || `Peint ${data.peintSongTitle}`);
+
+            container.innerHTML = `
+                <div class="space-y-4 animate-in fade-in duration-300">
+                    <!-- Title card -->
+                    <div class="bg-gradient-to-br from-romantic-950 via-romantic-950/90 to-[#180a0e] border border-romantic-800/50 rounded-3xl p-5 romantic-glow">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-romantic-900/80 text-romantic-300 text-xs px-3 py-1 rounded-full font-medium border border-romantic-700/40">
+                                ${data.dateStr}
+                            </span>
+                            <span class="text-romantic-400 text-xs font-medium flex items-center space-x-1">
+                                <i class="fa-solid fa-music text-[11px]"></i>
+                                <span>${data.peintSongTitle}</span>
+                            </span>
+                        </div>
+
+                        <h3 class="text-lg font-bold text-white mb-3 leading-snug">
+                            ${data.title}
+                        </h3>
+
+                        <!-- YouTube Embed -->
+                        <div class="w-full bg-black/60 rounded-2xl overflow-hidden border border-romantic-800/50 relative aspect-video shadow-lg mb-4">
+                            <iframe class="w-full h-full absolute inset-0" src="${embedUrl}" title="${data.peintSongTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+
+                        <!-- Letter Container -->
+                        <div class="bg-romantic-900/30 border border-romantic-800/40 rounded-2xl p-4 mb-4 relative">
+                            <i class="fa-solid fa-quote-left text-romantic-800 text-2xl absolute top-3 left-3 opacity-40"></i>
+                            <p class="text-xs sm:text-sm text-romantic-100/90 leading-relaxed italic relative z-10 pt-2 px-2 whitespace-pre-line">
+                                ${data.letter}
+                            </p>
+                        </div>
+
+                        <!-- Action Button for Oct 14 -->
+                        ${data.isFinalDay ? `
+                            <button onclick="openSurpriseModal()" class="w-full py-4 bg-gradient-to-r from-romantic-600 via-romantic-500 to-pink-600 hover:from-romantic-500 hover:to-pink-500 text-white font-bold rounded-2xl shadow-lg romantic-glow-strong transition-all transform active:scale-95 flex items-center justify-center space-x-2 text-sm mt-2">
+                                <i class="fa-solid fa-gift text-base"></i>
+                                <span>Presiona para el último regalo</span>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function openEditorModal() {
+            editingDayIndex = activeDayIndex;
+            renderEditorDaySelector();
+            loadEditorFormFields();
+            document.getElementById('editor-modal').classList.remove('hidden');
+        }
+
+        function closeEditorModal() {
+            document.getElementById('editor-modal').classList.add('hidden');
+        }
+
+        function renderEditorDaySelector() {
+            const container = document.getElementById('editor-day-selector');
+            container.innerHTML = '';
+            daysData.forEach((item, index) => {
+                const isActive = index === editingDayIndex;
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-1.5 rounded-xl text-xs font-medium shrink-0 transition-all ${isActive ? 'bg-romantic-600 text-white shadow' : 'bg-romantic-900/60 text-romantic-300'}`;
+                btn.onclick = () => {
+                    saveCurrentEditorInputsToState();
+                    editingDayIndex = index;
+                    renderEditorDaySelector();
+                    loadEditorFormFields();
+                };
+                btn.innerText = `${item.day} Oct`;
+                container.appendChild(btn);
+            });
+        }
+
+        function loadEditorFormFields() {
+            const data = daysData[editingDayIndex];
+            document.getElementById('edit-title').value = data.title || '';
+            document.getElementById('edit-song').value = data.peintSongTitle || '';
+            document.getElementById('edit-yt').value = data.youtubeId || data.songQuery || '';
+            document.getElementById('edit-letter').value = data.letter || '';
+        }
+
+        function saveCurrentEditorInputsToState() {
+            daysData[editingDayIndex].title = document.getElementById('edit-title').value;
+            daysData[editingDayIndex].peintSongTitle = document.getElementById('edit-song').value;
+            daysData[editingDayIndex].youtubeId = document.getElementById('edit-yt').value;
+            daysData[editingDayIndex].letter = document.getElementById('edit-letter').value;
+        }
+
+        function saveEditorData() {
+            saveCurrentEditorInputsToState();
+            saveDaysDataToStorage();
+            closeEditorModal();
+            renderDaysTabs();
+            renderActiveDayContent();
+
+            // Toast feedback
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-romantic-800 text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs flex items-center space-x-2';
+            toast.innerHTML = '<i class="fa-solid fa-check-circle"></i><span>¡Cartas guardadas con éxito!</span>';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        function resetDefaultData() {
+            if (confirm("¿Deseas restaurar los textos e información original?")) {
+                daysData = JSON.parse(JSON.stringify(defaultDaysData));
+                saveDaysDataToStorage();
+                loadEditorFormFields();
+                renderDaysTabs();
+                renderActiveDayContent();
+            }
+        }
+
+        function openSurpriseModal() {
+            document.getElementById('surprise-modal').classList.remove('hidden');
+            createFloatingHeartsBurst();
+        }
+
+        function closeSurpriseModal() {
+            document.getElementById('surprise-modal').classList.add('hidden');
+        }
+
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts-container');
+            if (!container) return;
+
+            setInterval(() => {
+                if (container.childElementCount > 12) return;
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '<i class="fa-solid fa-heart"></i>';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.bottom = '-20px';
+                heart.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 700);
+        }
+
+        function createFloatingHeartsBurst() {
+            const container = document.getElementById('hearts-container');
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.innerHTML = '<i class="fa-solid fa-heart text-romantic-400"></i>';
+                    heart.style.left = (50 + (Math.random() * 60 - 30)) + 'vw';
+                    heart.style.bottom = '40vh';
+                    heart.style.fontSize = (Math.random() * 18 + 12) + 'px';
+                    heart.style.animationDuration = '2s';
+                    container.appendChild(heart);
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 80);
+            }
+        }
+
+        window.onload = function() {
+            loadDaysData();
+            createFloatingHearts();
+        };
+    </script>
+</body>
+</html>
